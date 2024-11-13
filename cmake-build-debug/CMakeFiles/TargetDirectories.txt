@@ -1,3 +1,0 @@
-/Users/krotovnikolay/CLionProjects/doc_lab1/cmake-build-debug/CMakeFiles/doc_lab1.dir
-/Users/krotovnikolay/CLionProjects/doc_lab1/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/krotovnikolay/CLionProjects/doc_lab1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
