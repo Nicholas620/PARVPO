@@ -52,7 +52,7 @@ void update_particles(std::vector<Particle>& particles, double dt) {
 }
 
 int main() {
-    int num_particles = 600;
+    int num_particles = 1000;
     double dt = 0.01;
     int num_steps = 10000;
 
