@@ -3,6 +3,7 @@
 #include <cmath>
 #include <random>
 #include <chrono>
+#include <omp.h> // Подключение OpenMP
 
 struct Particle {
     double x, y, z;
@@ -15,7 +16,7 @@ void compute_force(const Particle& p1, const Particle& p2, double& fx, double& f
     double dx = p2.x - p1.x;
     double dy = p2.y - p1.y;
     double dz = p2.z - p1.z;
-    double distance = std::sqrt(dx*dx + dy*dy + dz*dz);
+    double distance = std::sqrt(dx * dx + dy * dy + dz * dz);
     double force = G / (distance * distance);
 
     fx = force * dx / distance;
@@ -25,6 +26,9 @@ void compute_force(const Particle& p1, const Particle& p2, double& fx, double& f
 
 void update_particles(std::vector<Particle>& particles, double dt) {
     int n = particles.size();
+
+    // Параллельная обработка частиц
+#pragma omp parallel for schedule(static)
     for (int i = 0; i < n; ++i) {
         double fx = 0, fy = 0, fz = 0;
         for (int j = 0; j < n; ++j) {
@@ -48,7 +52,7 @@ void update_particles(std::vector<Particle>& particles, double dt) {
 }
 
 int main() {
-    int num_particles = 6000;
+    int num_particles = 600;
     double dt = 0.01;
     int num_steps = 10000;
 
@@ -67,9 +71,12 @@ int main() {
     }
 
     auto start_time = std::chrono::high_resolution_clock::now();
+
+    // Параллельный расчет
     for (int step = 0; step < num_steps; ++step) {
         update_particles(particles, dt);
     }
+
     auto end_time = std::chrono::high_resolution_clock::now();
 
     std::chrono::duration<double> elapsed_time = end_time - start_time;

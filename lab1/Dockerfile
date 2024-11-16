@@ -1,22 +1,20 @@
-# тут мы спользуем официальный образ Alpine с CMake и GCC
+# Используем базовый образ на основе Alpine
 FROM alpine:latest
 
-# тут устанавливаем необходимые пакеты: GCC, CMake и Git
-RUN apk update && apk add --no-cache \
-    build-base \
-    cmake \
-    git \
-    libstdc++ \
-    && rm -rf /var/cache/apk/*
+# Обновляем пакетный менеджер и устанавливаем зависимости
+RUN apk add --no-cache git g++ make cmake libc-dev
 
-# Копируем исполняемыц код проекта в контейнер
-COPY . /app
-
-# Устанавливаем рабочую директорию нашего проекта
+# Создаем рабочую директорию
 WORKDIR /app
 
-# Создаем директорию для сборки и компилируем проект
-RUN mkdir -p build && cd build && cmake .. && make
+# Клонируем репозиторий
+RUN git clone https://github.com/Nicholas620/PARVPO.git .
 
-# Запускаем скомпилированную программу
-CMD ["./build/particle_simulation"]
+# Переходим в каталог lab1
+WORKDIR /app/lab1
+
+# Компилируем приложение
+RUN g++ -std=c++17 -o particle_sim main.cpp
+
+# Устанавливаем точку входа для контейнера
+ENTRYPOINT ["./particle_sim"]
