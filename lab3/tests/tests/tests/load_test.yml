@@ -1,0 +1,37 @@
+# tests/load_test.yml
+config:
+  target: "https://sleep-activity.ru"
+  phases:
+    - duration: 300   # Продолжительность теста в секундах
+      arrivalRate: 10 # Количество новых виртуальных пользователей в секунду
+  processor: "./processor.js"
+  payload:
+    path: "../data/users.json"
+    fields:
+      - "username"
+      - "email"
+      - "password"
+      - "birthdate"
+  http:
+    timeout: 60
+scenarios:
+  - name: "User Registration and Sleep Data Submission"
+    flow:
+      - post:
+          url: "/api/register"
+          json:
+            name: "{{ username }}"
+            email: "{{ email }}"
+            password: "{{ password }}"
+            birth_date: "{{ birthdate }}"
+          capture:
+            - json: "$.token"
+              as: "authToken"
+      - think: 1
+      - post:
+          url: "/api/add_sleep"
+          json:
+            name: "{{ username }}"
+            sleep_start_time: "{{ start_time }}"
+            sleep_end_time: "{{ end_time }}"
+            quality_score: "{{ sleep_quality }}"

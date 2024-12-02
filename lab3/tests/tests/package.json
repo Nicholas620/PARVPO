@@ -1,0 +1,16 @@
+{
+  "name": "sleep-activity-load-test",
+  "version": "1.0.0",
+  "description": "Load testing scripts for sleep-activity.ru using Artillery",
+  "main": "index.js",
+  "scripts": {
+    "generate-users": "node scripts/generate_users.js",
+    "test": "artillery run tests/load_test.yml -o logs/artillery.log"
+  },
+  "author": "Nicholas",
+  "license": "MIT",
+  "dependencies": {
+    "artillery": "^2.0.21",
+    "faker": "^5.5.3"
+  }
+}
